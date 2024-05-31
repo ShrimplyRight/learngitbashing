@@ -30,6 +30,14 @@ def load_and_validate_xml(file_path):
     root = tree.getroot()
     return ET.tostring(root, encoding='utf8').decode('utf8')
 
+def save_to_xml(data, file_path):
+    root = ET.Element("root")
+    for key, value in data.items():
+        child = ET.SubElement(root, key)
+        child.text = str(value)
+    tree = ET.ElementTree(root)
+    tree.write(file_path)
+
 def main():
     parser = argparse.ArgumentParser(description='My Program Description')
     parser.add_argument('--input', type=str, help='Input file (JSON, YAML, or XML)')
@@ -58,7 +66,7 @@ def main():
         elif args.format == 'xml':
             data = load_and_validate_xml(args.input)
             print("XML is valid")
-            # Save XML data here (not implemented yet)
+            save_to_xml(data, args.output)
         print(f"Data saved to {args.output}")
     except (jsonschema.exceptions.ValidationError, yaml.YAMLError, ET.ParseError) as e:
         print(f"Invalid file: {e}")
