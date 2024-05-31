@@ -1,0 +1,36 @@
+name: Build and Upload
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # raz w tygodniu, w niedzielę o północy
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          .\installResources.ps1
+
+      - name: Build executable
+        run: pyinstaller --onefile gui.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: data-processor-exe
+          path: dist/gui.exe
