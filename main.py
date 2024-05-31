@@ -39,7 +39,7 @@ def save_to_xml(data, file_path):
     tree.write(file_path)
 
 def main():
-    parser = argparse.ArgumentParser(description='My Program Description')
+    parser = argparse.ArgumentParser(description='Data conversion')
     parser.add_argument('--input', type=str, help='Input file (JSON, YAML, or XML)')
     parser.add_argument('--output', type=str, help='Output file (JSON, YAML, or XML)')
     parser.add_argument('--format', type=str, choices=['json', 'yaml', 'xml'], help='Input file format')
