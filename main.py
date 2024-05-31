@@ -1,17 +1,3 @@
-import argparse
-
-def main():
-    parser = argparse.ArgumentParser(description='My Program Description')
-    parser.add_argument('--input', type=str, help='Input file')
-    parser.add_argument('--output', type=str, help='Output file')
-    args = parser.parse_args()
-
-    print(f"Input: {args.input}")
-    print(f"Output: {args.output}")
-
-if __name__ == "__main__":
-    main()
-    
 import json
 import jsonschema
 from jsonschema import validate
@@ -23,10 +9,14 @@ def load_and_validate_json(file_path, schema):
     validate(instance=data, schema=schema)
     return data
 
+def save_to_json(data, file_path):
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=4)
+
 def main():
     parser = argparse.ArgumentParser(description='My Program Description')
     parser.add_argument('--input', type=str, help='Input JSON file')
-    parser.add_argument('--output', type=str, help='Output file')
+    parser.add_argument('--output', type=str, help='Output JSON file')
     args = parser.parse_args()
 
     schema = {
@@ -41,7 +31,8 @@ def main():
     try:
         data = load_and_validate_json(args.input, schema)
         print("JSON is valid")
-        print(data)
+        save_to_json(data, args.output)
+        print(f"Data saved to {args.output}")
     except jsonschema.exceptions.ValidationError as e:
         print(f"Invalid JSON: {e.message}")
 
